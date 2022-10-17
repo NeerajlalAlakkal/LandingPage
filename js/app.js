@@ -41,10 +41,9 @@
 const sections = document.querySelectorAll('section');
 
 
-// build the nav
+/*<------------build the nav--------------->*/
 const navBarList=document.getElementById('navbar__list');
 let nav_but =document.createElement('li');
-// Add class 'active' to section when near top of viewport
 navBarList.classList.add('navbar__menu');
 for (let i = 1; i <= sections.length; i++)
 {
@@ -52,25 +51,25 @@ for (let i = 1; i <= sections.length; i++)
     nav_sec.classList.add('navbar__menu');
     let nav_link = document.createElement('a');
     nav_link.classList.add('menu__link')
-    // nav_link.setAttribute('', '#section' + i);
-    nav_link.dataset.nav = 'Section ' + i;
+    nav_link.setAttribute('href', '#section' + i)
+    nav_link.dataset.nav = 'Section '+ i;
     nav_sec.appendChild(nav_link);
     navBarList.appendChild(nav_sec);
     if ( i == 1)
     {
-        nav_link.textContent = 'Section 1';
+        nav_link.textContent = 'Lion';
     }
     else if ( i == 2)
     {
-        nav_link.textContent = 'Section 2';
+        nav_link.textContent = 'Tiger';
     }
     else if (i == 3)
     {
-        nav_link.textContent = 'Section 3';
+        nav_link.textContent = 'Fox';
     }
     else if (i == 4)
     {
-        nav_link.textContent = 'Section 4';    
+        nav_link.textContent = 'Panther';    
     }
 
 
@@ -78,54 +77,52 @@ for (let i = 1; i <= sections.length; i++)
         nav_link.textContent = 'Section' + i;
     }
 }
-//element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
 
+/*---------------------form---------------------*/ 
 const formElement= document.querySelector('#formList')
 formElement.addEventListener('submit', function (event){
     event.preventDefault();
-    confirm('Form Submited Successfully');
+    confirm('Form Submitted Successfully');
 });
+/*-------------Selecting all navElements-------------*/
+const navElements = document.querySelectorAll('.navbar__menu');
+
+/*<------------------Highting Sections and Nav--------------------->*/ 
 window.addEventListener('scroll', highlightSectionAndNav )
 function highlightSectionAndNav(){
-for (let index = 0; index < sections.length; index++) {
-    const element = sections[index];
-    const topLine = element.getBoundingClientRect().top
-    const bottomLine = element.getBoundingClientRect().bottom
-    const windowHeight = window.innerHeight * 0.5 
-    if (topLine < windowHeight && bottomLine > windowHeight) {
-    return element.classList.add('your-active-class')    
-    } 
-    element.classList.remove('your-active-class')
+    for (let i = 0; i< sections.length; i++) {
+        const element = sections[i];
+        const topLine = element.getBoundingClientRect().top;
+        const bottomLine = element.getBoundingClientRect().bottom;
+        const windowHeight = window.innerHeight *0.5; 
+        if (topLine < windowHeight && bottomLine > windowHeight) {
+            navElements[i + 2].id = 'active-sec';
+
+            element.classList.add('your-active-class')    
+        } 
+        else{
+            element.classList.remove('your-active-class')
+            navElements[i+2].id = '';
+        }
+    }
 }
-}
+/*<------------------Anchors--------------->*/ 
 const anchors = document.querySelectorAll('a');
 
-for (let index = 0; index < anchors.length; index++) {
-    const anchorElement = anchors[index];
-  
-anchorElement.addEventListener('click', function(event){
-const data = event.target.dataset.nav
-const element = document.querySelector(`section[data-nav='${data}']`)
-element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});   
-})    
-    
+function jumpingToSection (e)
+{
+    if (e.target.nodeName == 'A')
+    {
+        e.preventDefault();
+        console.log(e.target);
+        for (let section of sections)
+        {
+            if (section.dataset.nav == e.target.dataset.nav)
+            {
+                section.scrollIntoView({behavior: "smooth", block: "start"});
+            }
+        }
+    }
 }
-
-//We need to select all the sections
- // Loop through all sections.Check if the section is in view.
-// If it is in view at the class 'your-active-class', IF ITS NOT IN VIEW we need to remove it.
-
-
-/**
- * End Main Functions
- * Begin Events
- * 
-*/
-
-// Build menu 
-
-// Scroll to section on link click
-
-// Set sections as active
-
+navBarList.addEventListener('click', jumpingToSection);
 
